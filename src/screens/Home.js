@@ -11,11 +11,11 @@ import PostComponent from '../components/PostComponent'
 const Home = ({navigation}) => {
     const dispatch = useDispatch()
     const posts = useSelector((state) => state.posts)
-    console.log('POSTS:', posts)
+    // console.log('POSTS:', posts)
 
     const posts_owners = useSelector((state) => state.posts_owners)
 
-    console.log('owners:', posts_owners)
+    // console.log('owners:', posts_owners)
 
     const fetchPosts = async() => {
         dispatch(FetchPostOwner())
@@ -26,7 +26,6 @@ const Home = ({navigation}) => {
         const unsubscribe = navigation.addListener('focus', () => {
             fetchPosts()
           });
-      
           return unsubscribe;
     },[navigation])
 

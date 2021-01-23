@@ -39,7 +39,9 @@ const SearchScreen = ({navigation}) => {
     )
 
     return <View style={{backgroundColor:'white', flex:1}} >
-        <Header />
+        <Header 
+            centerComponent={{text:'Find new users', style:{color:'#fff', fontSize:17}}}
+        />
         <SearchBar
             
             value={search}
@@ -47,7 +49,7 @@ const SearchScreen = ({navigation}) => {
             containerStyle={{backgroundColor:'white'}}
             // inputContainerStyle={{backgroundColor:'white', borderWidth:1}}
             round
-            showLoading={true}
+            showLoading
             lightTheme
             onChangeText={(text)=>{
                 HandleSearch(text)

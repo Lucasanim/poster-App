@@ -9,7 +9,7 @@ const ProfileStack = () => {
     return <stack.Navigator>
         <stack.Screen name='profile' component={ProfileScreen} 
             options={()=>({
-                headerShown:true
+                headerShown:false
             })}
         />
     </stack.Navigator>

@@ -1,13 +1,11 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Text, Input, Button, Avatar } from 'react-native-elements'
 
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import ImagePicker from 'react-native-image-crop-picker'
 
-import {Login} from '../redux/Actions'
-
-const AuthForm = ({action, signup}) => {
+const AuthForm = ({action, signup, image}) => {
 
     const [email, setEmail] = useState('')
 
@@ -36,7 +34,11 @@ const AuthForm = ({action, signup}) => {
                     containerStyle={{backgroundColor:'gray'}}
                     rounded
                     size='xlarge'
-                    source={img.path &&{uri:img.path}}
+                    source={
+                        img
+                        ? img.path &&{uri:img.path}
+                        : {uri:image}
+                    }
                 />
                 <Button type='outline' title='Choose a photo'
                     onPress={HandleChooseAPhoto}
@@ -94,6 +96,9 @@ const AuthForm = ({action, signup}) => {
             }
             onPress={()=>{
                 action(email, password, fisrtName, lastName, img)
+                signup
+                ? setImg('')
+                :null
             }}
         />
     </>

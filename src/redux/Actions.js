@@ -199,3 +199,31 @@ export const LogOut = () => async (dispatch) => {
         
     }
 }
+
+export const EditProfile = (email, first_name, last_name, image, callback) => async () => {
+    console.log(first_name)
+    const createFormData = (image, body) => {
+        const data = new FormData();
+        if(image) data.append("avatar", {
+                    name: image.path,
+                    type: image.mime,
+                    uri: image.path
+                    // Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+                }); 
+
+        if(body.email) data.append('email', body.email)
+        if(body.first_name) data.append('first_name', body.first_name)
+        if(body.last_name) data.append('last_name', body.last_name)
+
+        return data;
+    };
+
+    // const response = await axios.patch('/account/me/',{
+    //                                                 'email':email,
+    //                                                 'first_name': first_name,
+    //                                                 'last_name': last_name
+    //                                             })
+    const response = await axios.patch('/account/me/', createFormData(image, {email, first_name, last_name}))
+
+    if (callback) callback()
+}

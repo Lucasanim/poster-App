@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import {View} from 'react-native'
+import {Header} from 'react-native-elements'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -25,6 +26,9 @@ const ProfileScreen = ({navigation}) => {
           return unsubscribe;
     },[navigation])
     return <View>
+        <Header 
+            centerComponent={{text:'My profile', style:{color:'#fff', fontSize:17}}}
+        />
         <ProfileComponent 
             posts={my_posts}
             profile={my_profile}
