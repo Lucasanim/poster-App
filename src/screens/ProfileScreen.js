@@ -25,8 +25,9 @@ const ProfileScreen = ({navigation}) => {
       
           return unsubscribe;
     },[navigation])
-    return <View>
-        <Header 
+    return <View style={{flex:1}} >
+        <Header
+            leftComponent={{icon:'list', color:'#fff', onPress:()=>navigation.openDrawer()}}
             centerComponent={{text:'My profile', style:{color:'#fff', fontSize:17}}}
         />
         <ProfileComponent 

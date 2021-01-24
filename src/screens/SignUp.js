@@ -16,13 +16,14 @@ const SignUp = ({navigation}) => {
         {/* <Text h1 style={{alignSelf:'center', flex:0.1, margin:40}} >REGISTER</Text> */}
         <View style={{flex:1, justifyContent:'center', alignItems:'center'}} >
             <AuthForm 
-                action={(email, password, first_name, last_name, img)=>{
+                action={(email, password, first_name, last_name, username,img)=>{
                     dispatch(signup(
-                        console.log('signing'),
+                        ()=>navigation.navigate('login'),
                         email,
                         password,
                         first_name,
                         last_name,
+                        username,
                         img
                     ))
                 }}

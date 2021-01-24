@@ -33,7 +33,7 @@ export const Login = (callback, email, password) => async (dispatch) =>{
     }
 }
 
-export const SignUp = (callback, email, password, first_name, last_name, image) => async (dispatch) => {
+export const SignUp = (callback, email, password, first_name, last_name, username,image) => async (dispatch) => {
 
     console.log('img:', image)
 
@@ -48,6 +48,7 @@ export const SignUp = (callback, email, password, first_name, last_name, image) 
         });
 
         data.append('email', body.email)
+        data.append('username', body.username)
         data.append('password', body.password)
         data.append('first_name', body.first_name)
         data.append('last_name', body.last_name)
@@ -59,10 +60,12 @@ export const SignUp = (callback, email, password, first_name, last_name, image) 
                                                                         email,
                                                                         first_name,
                                                                         last_name,
+                                                                        username,
                                                                         password
                                                                     })
     )
-    console.log('RESPONSE:', response.data)
+    
+    if(callback) callback()
 }
 
 export const FetchPosts = () => async (dispatch) => {
@@ -147,7 +150,7 @@ export const CreateNewPost = (title, description, image, callback) => async (dis
 
 export const deletePost = (id) => async (dispatch) => {
     const response = await axios.delete(`/post/my-posts/${id}/`)
-    
+    dispatch(FetchMyPost())
 }
 
 export const FetchPostOwner = () => async (dispatch) => {
@@ -200,7 +203,7 @@ export const LogOut = () => async (dispatch) => {
     }
 }
 
-export const EditProfile = (email, first_name, last_name, image, callback) => async () => {
+export const EditProfile = (email, password,first_name, last_name, username,image, callback) => async () => {
     console.log(first_name)
     const createFormData = (image, body) => {
         const data = new FormData();
@@ -212,8 +215,10 @@ export const EditProfile = (email, first_name, last_name, image, callback) => as
                 }); 
 
         if(body.email) data.append('email', body.email)
+        if(body.username) data.append('username', body.username)
         if(body.first_name) data.append('first_name', body.first_name)
         if(body.last_name) data.append('last_name', body.last_name)
+        if(body.password) data.append('password', body.password)
 
         return data;
     };
@@ -223,7 +228,7 @@ export const EditProfile = (email, first_name, last_name, image, callback) => as
     //                                                 'first_name': first_name,
     //                                                 'last_name': last_name
     //                                             })
-    const response = await axios.patch('/account/me/', createFormData(image, {email, first_name, last_name}))
+    const response = await axios.patch('/account/me/', createFormData(image, {email, username,first_name, last_name, password}))
 
     if (callback) callback()
 }

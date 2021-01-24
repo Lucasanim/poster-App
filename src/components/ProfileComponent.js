@@ -82,7 +82,10 @@ const ProfileComponent = ({posts, profile, del, isMine, nav, fs}) => {
                         />
                     }
                     
-                    <Text>{profile.first_name} {profile.last_name}</Text>
+                    <View>
+                        <Text>{profile.first_name} {profile.last_name}</Text>
+                        <Text>@{profile.username}</Text>
+                    </View>
                 </View>
 
                 <Divider style={{marginHorizontal:30}} />
@@ -152,6 +155,7 @@ const ProfileComponent = ({posts, profile, del, isMine, nav, fs}) => {
                     </Card>
                 }
                 numColumns={1}
+                refreshing
                 renderItem={({item}) => {
                     return <TouchableOpacity>
                         <Card>

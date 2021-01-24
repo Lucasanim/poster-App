@@ -37,6 +37,12 @@ const PostForm = ({action}) => {
           });
     }
 
+    const setDefaults = () => {
+        setTitle('')
+        setimg('')
+        setDescription('')
+    }
+
     return(
         <View style={{  }}>
             <Input 
@@ -73,7 +79,10 @@ const PostForm = ({action}) => {
         <Button 
             title='Done!'
             containerStyle={{width:100, alignSelf:'center', borderRadius:30}}
-            onPress={() => action(title, description, img) }
+            onPress={() => {
+                action(title, description, img)
+                setDefaults()
+            }}
         />
 
       </View>

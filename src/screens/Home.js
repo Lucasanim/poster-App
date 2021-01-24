@@ -23,6 +23,7 @@ const Home = ({navigation}) => {
     }
 
     useEffect(()=>{
+        fetchPosts()
         const unsubscribe = navigation.addListener('focus', () => {
             fetchPosts()
           });

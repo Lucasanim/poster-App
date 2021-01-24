@@ -9,6 +9,7 @@ const AuthForm = ({action, signup, image}) => {
 
     const [email, setEmail] = useState('')
 
+    const [username, setUsername] = useState('')
     const [fisrtName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [password, setPassword] = useState('')
@@ -23,6 +24,15 @@ const AuthForm = ({action, signup, image}) => {
               setImg(image)
             console.log(image);
           });
+    }
+
+    const setDefaults = () => {
+        setImg('')
+        setEmail('')
+        setUsername('')
+        setFirstName('')
+        setLastName('')
+        setPassword('')
     }
 
     return<>
@@ -58,6 +68,12 @@ const AuthForm = ({action, signup, image}) => {
         {
             signup
             ?<>
+                <Input 
+                    placeholder='Username'
+                    leftIcon={{ type: 'Ionicons', name: 'person', color:'gray' }}
+                    value={username}
+                    onChangeText={(text) => setUsername(text)}
+                />
                 <Input 
                     placeholder='First name'
                     leftIcon={{ type: 'Ionicons', name: 'person', color:'gray' }}
@@ -95,9 +111,9 @@ const AuthForm = ({action, signup, image}) => {
                 />
             }
             onPress={()=>{
-                action(email, password, fisrtName, lastName, img)
+                action(email, password, fisrtName, lastName, username,img)
                 signup
-                ? setImg('')
+                ? setDefaults()
                 :null
             }}
         />

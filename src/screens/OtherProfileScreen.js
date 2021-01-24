@@ -33,7 +33,7 @@ const OtherProfileScreen = ({navigation, route}) => {
     return <View style={{backgroundColor:'white', flex:1}} >
         <Header 
             leftComponent={{ icon:'arrow-back', color:'#fff', onPress:()=>navigation.goBack() }}
-            centerComponent={{ text:user.first_name, style:{color:'#fff', fontSize:17} }}
+            centerComponent={{ text:user.username, style:{color:'#fff', fontSize:17} }}
         />
         <ProfileComponent 
             posts={posts}

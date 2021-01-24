@@ -22,8 +22,8 @@ const EditProfileScreen = ({navigation}) => {
         <AuthForm 
             signup={true}
             image={profile.avatar}
-            action={(email, password, first_name, last_name, image)=>{
-                dispatch(EditProfile(email, first_name, last_name, image, ()=> navigation.navigate('profilestack')))
+            action={(email, password, first_name, last_name, username,image)=>{
+                dispatch(EditProfile(email, password,first_name, last_name, username,image, ()=> navigation.navigate('profilestack')))
             }}
         />
     </View>
