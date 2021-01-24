@@ -1,0 +1,1 @@
+Poster app was made for posting self states, images and share information with other people.
