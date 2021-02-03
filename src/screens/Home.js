@@ -33,6 +33,7 @@ const Home = ({navigation}) => {
     return <View style={{backgroundColor:'white', flex:1}} >
         <Header 
             centerComponent={{ text:'POSTER', style:{color:'#fff', fontSize:17} }}
+            rightComponent={{icon:'home', onPress:()=>navigation.navigate('chat-list')}}
         />
         <PostComponent 
             post={posts}
