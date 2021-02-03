@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react'
-import {View} from 'react-native'
+import {View, TouchableOpacity} from 'react-native'
 import {Text, Header} from 'react-native-elements'
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { FetchPosts, FetchPostOwner } from '../redux/Actions'
+import Icon from 'react-native-vector-icons/Ionicons'
+
+import { FetchPosts, FetchPostOwner, FetchThreads } from '../redux/Actions'
 
 import PostComponent from '../components/PostComponent'
 
@@ -20,6 +22,7 @@ const Home = ({navigation}) => {
     const fetchPosts = async() => {
         dispatch(FetchPostOwner())
         dispatch(FetchPosts())
+        dispatch(FetchThreads())
     }
 
     useEffect(()=>{
@@ -33,7 +36,11 @@ const Home = ({navigation}) => {
     return <View style={{backgroundColor:'white', flex:1}} >
         <Header 
             centerComponent={{ text:'POSTER', style:{color:'#fff', fontSize:17} }}
-            rightComponent={{icon:'home', onPress:()=>navigation.navigate('chat-list')}}
+            rightComponent={<TouchableOpacity
+                onPress={()=>navigation.navigate('chat-list')}
+            >
+                <Icon name='chatbubble-outline' size={25}/>
+            </TouchableOpacity>}
         />
         <PostComponent 
             post={posts}

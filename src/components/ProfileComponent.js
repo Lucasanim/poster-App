@@ -20,12 +20,19 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import {useDispatch, useSelector} from 'react-redux'
 
-import {HandleFollow, HandleUnfollow, FetchPostOwner} from '../redux/Actions'
+import { useNavigation } from '@react-navigation/native'
+
+import {HandleFollow, HandleUnfollow, FetchPostOwner, CreateNewThread} from '../redux/Actions'
 
 const ProfileComponent = ({posts, profile, del, isMine, nav, fs}) => {
     const dispatch = useDispatch()
+    const navigation = useNavigation()
 
     const [follows, setFollows] = useState(fs)
+
+    const threads = useSelector( state => state.threads)
+    var a = threads.filter((i) => i.users.includes(profile.username))
+    console.log('a',a)
 
     let first_letter = profile.first_name[0]
     let second_letter = profile.last_name[0]
@@ -135,7 +142,20 @@ const ProfileComponent = ({posts, profile, del, isMine, nav, fs}) => {
                                     }}
                                 />
                             }
-                            <Button title='Message' type='outline' containerStyle={{width:'30%'}} />
+                            
+                            {
+                                a.length > 0
+                                ?<Button title='Message' type='outline' containerStyle={{width:'30%'}}
+                                    onPress={()=>{
+                                        navigation.navigate('chat',{pk:a[0].id})
+                                    }}
+                                />
+                                :<Button title='Message' type='outline' containerStyle={{width:'30%'}}
+                                    onPress={()=>{
+                                        dispatch(CreateNewThread(profile.id, (id)=>navigation.navigate('chat',{pk:id})))
+                                    }}
+                                />
+                            }
                         </>
                     }
                 </View>

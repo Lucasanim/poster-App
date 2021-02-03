@@ -3,11 +3,16 @@ const initialState = {
     posts:[],
     my_posts:[],
     my_profile:{},
-    posts_owners:{}
+    posts_owners:{},
+    threads:[]
 }
 
 export const MainReducer = (state=initialState, action) => {
     switch(action.type){
+        case 'FETCH_THREADS':
+            return Object.assign({}, state, {
+                threads: action.payload
+            })
         case 'LOT_OUT':
             return Object.assign({},state, {
                 token:''

@@ -232,3 +232,15 @@ export const EditProfile = (email, password,first_name, last_name, username,imag
 
     if (callback) callback()
 }
+
+export const FetchThreads = () => async (dispatch) => {
+    const response = await axios.get('/chat/threads/')
+    dispatch({type:'FETCH_THREADS', payload:response.data})
+    console.log('threads:', response.data)
+    return response.data
+}
+
+export const CreateNewThread = (id, callback) => async () => {
+    const response = await axios.post('/chat/threads/create/', {'id':id})
+    if(callback) callback(response.data.id)
+}

@@ -1,40 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
-  Text,
-  StatusBar,
-  Button,
   FlatList,
-  TextInput,
   TouchableOpacity
 } from 'react-native'
 
-import {Header} from 'react-native-elements'
+import {Header, Avatar, Text} from 'react-native-elements'
+
+import {useSelector, useDispatch} from 'react-redux'
 
 import  useWebSocket, {ReadyState} from  'react-native-use-websocket';
 
+import {FetchThreads as Fetch_Threads} from '../redux/Actions'
+
+import axios from '../axios/Axios'
 
 const ChatListScreen = ({navigation}) => {
 
-  const [pk, setPk] = useState('3')
+  const dispatch = useDispatch()
+
+  const me = useSelector((state) => state.my_profile)
+
   const[threads, setThreads] = useState([])
-  const [user, setUser] = useState('')
-
-  const fetchs = async() => {
-    const response = await fetch('http://192.168.100.107:8000/chat/threads/',{
-      method:'GET',
-      headers:{
-        'Authorization': 'token 473f9ef5bdd39c33c51d7d16ce1ee54786cb1f21'
-      },
-    }).then(response => response.json())
-    .then(data => setThreads(data))
+  console.log(threads)
+  const FetchThreads = async() => {
+    const data = await dispatch(Fetch_Threads())
+    setThreads(data)
   }
-
-  const [token, setToken] = useState('f3d815c7a50998199efff71ab26e8df786827307')
-
     //socket
     // const socketUrl = `ws://192.168.100.107:8000/socket/`
     // const { sendMessage, sendJsonMessage, lastMessage, readyState, getWebSocket, lastJsonMessage } = useWebSocket(socketUrl,{
@@ -48,30 +41,42 @@ const ChatListScreen = ({navigation}) => {
     // });
 
   useEffect(()=>{
-    fetchs()
-  },[])
+    const unsubscribe = navigation.addListener('focus', () => {
+      FetchThreads()
+    });
+
+    return unsubscribe;
+  },[navigation])
   
   return (
-    <View style={{flex:1}}>
-        <Header 
+    <View style={styles.Container}>
+        <Header
+            leftComponent={{ icon:'arrow-back', color:'#fff', onPress:()=>navigation.goBack() }}
             centerComponent={{ text:'POSTER', style:{color:'#fff', fontSize:17} }}
-            // rightComponent={{icon:'home', onPress:()=>navigation.navigate('chat-list')}}
         />
       <FlatList
         ListEmptyComponent={<Text>empty</Text>}
         data={threads}
+        keyExtractor={ i => i.id.toString()}
         renderItem={({ item }) =>
-          // item && <Text>{item.data.text}</Text>
-          // item && <Text>{}a</Text>
-          // item && <Text>{Object.keys(item)}</Text>
-
-        //   item && item.text && <Text>{item.text} of {item.owner}</Text>
           item &&  <TouchableOpacity
-                onPress={()=>{
-                    navigation.navigate('chat', {pk:item})
-                }}
+                onPress={()=>navigation.navigate('chat', {pk:item.id})}
+                style={styles.ThreadComponent}
             >
-              <Text>{item}</Text>
+              {
+                item.avatar 
+                ?<Avatar
+                  source={{uri: `http://192.168.100.107:8000/media/${item.avatar}`}}
+                  rounded
+                  size='large'
+                  containerStyle={styles.AvatarContainer}
+                /> : null
+              }
+              {
+                item.name
+                ? <Text style={styles.NameText}>{item.name}</Text> : null
+              }
+              <Text style={styles.UserText} >{item.users.filter(i => i !== me.username)}</Text>
             </TouchableOpacity>
         }
       />
@@ -80,7 +85,27 @@ const ChatListScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  
+  Container: {
+    flex:1,
+    backgroundColor: 'white'
+  },
+  ThreadComponent: {
+    backgroundColor: 'white',
+    alignContent:'center',
+    alignItems:'center',
+    // justifyContent:'center',
+    flexDirection:'row'
+  },
+  AvatarContainer: {
+    margin:10
+  },
+  NameText: {
+
+  },
+  UserText: {
+    fontSize: 15,
+    fontWeight: 'bold'
+  }
 });
 
 export default ChatListScreen

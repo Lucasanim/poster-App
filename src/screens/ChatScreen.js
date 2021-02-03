@@ -1,15 +1,24 @@
-import React, {useState} from 'react'
-import {View, Text, FlatList, Button, TextInput} from 'react-native'
+import React, {useState, useRef, useEffect} from 'react'
+import {View, FlatList, TextInput, StyleSheet} from 'react-native'
+import { Text, Button, Header} from 'react-native-elements'
+
+import { useSelector } from 'react-redux'
 
 import  useWebSocket, {ReadyState, } from  'react-native-use-websocket';
 
-const Chat = ({route}) => {
+import MessageComponent from '../components/MessageComponent'
+
+const Chat = ({route, navigation}) => {
     const {pk} = route.params
 
     const [text, setText] = useState('')
 
+    const token = useSelector((state) => state.token)
+
+    const flatListRef = useRef()
+
     // const [token, setToken] = useState('2fc7608d321d6a8965a27d98decd80f4f4f0774f')
-    const [token, setToken] = useState('473f9ef5bdd39c33c51d7d16ce1ee54786cb1f21')
+    // const [token, setToken] = useState('473f9ef5bdd39c33c51d7d16ce1ee54786cb1f21')
 
     //socket
     const socketUrl = `ws://192.168.100.107:8000/chat/socket/${pk}/`
@@ -49,38 +58,68 @@ const Chat = ({route}) => {
     }
 
     const b = messages_filter()
-    const create = () => {
-        sendJsonMessage({
-        "action": "create",
-        "request_id": 12,
-        "data": {'title': text},
-        })
+    const SendMessage = () => {
+        if(text){
+            sendJsonMessage({
+                "data": {'title': text},
+            })
+        }
     }
 
-    return <View style={{flex:1}}>
-        <Text>The WebSocket is currently {connectionStatus}</Text>
-        <Button title="CREATE" onPress={create} />
+    useEffect(()=>{
+        flatListRef.current.scrollToEnd()
+    },[])
+
+    return <View style={styles.container}>
+        <Header
+            leftComponent={{ icon:'arrow-back', color:'#fff', onPress:()=>navigation.goBack() }}
+            centerComponent={{ text:'POSTER', style:{color:'#fff', fontSize:17} }}
+        />
         <FlatList
+            ref = {flatListRef}
+            onContentSizeChange={()=> flatListRef.current.scrollToEnd()} 
             data={messageHistory.current}
-            ListEmptyComponent={<Text>nada</Text>}
-            keyExtractor={(i,l)=>l}
+            ListEmptyComponent={<Text></Text>}
+            keyExtractor={(i,l)=>l.toString()}
             renderItem={({item}) => {
-                return (
-                    <View>
-                        <Text>{item.text}</Text>
-                    </View>
-                )
+                return item && Object.keys(item).length !==0 ? <MessageComponent message={item} /> : null
+                
             }}
         />
-        <View style={{flexDirection:'row'}} >
+        <View style={styles.InputContainer} >
             <TextInput 
-                placeholder='text'
+                placeholder='message'
                 value={text}
                 onChangeText={t => setText(t)}
+                style={{flex:1}}
+                multiline
             />
-            <Button title='send' onPress={create} />
+            <Button title='send' containerStyle={styles.SubmitButton} type='clear'
+                onPress={()=>{
+                    SendMessage()
+                    setText('')
+                }}
+            />
         </View>
     </View>
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex:1,
+        backgroundColor: 'white'
+    },
+    InputContainer: {
+        flexDirection: 'row',
+        margin: 5,
+        backgroundColor: '#e8e8e8',
+        borderRadius: 25,
+    },
+    SubmitButton: {
+        flex:0.4,
+        margin:5,
+        
+    }
+})
 
 export default Chat
